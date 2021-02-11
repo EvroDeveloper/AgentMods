@@ -1,0 +1,30 @@
+let xyz: Position = null
+player.onChat("perimeter", function (num1) {
+    agent.teleport(pos(num1, 78, num1), WEST)
+    xyz = agent.getPosition()
+    while (agent.getPosition().getValue(Axis.Y) > 78) {
+        for (let index = 0; index < num1 / 2; index++) {
+            for (let index = 0; index < num1; index++) {
+                mobs.spawn(PRIMED_TNT, agent.getPosition())
+                loops.pause(0)
+                agent.move(FORWARD, 2)
+            }
+            for (let index = 0; index < 2; index++) {
+                agent.turn(RIGHT_TURN)
+                agent.move(FORWARD, 2)
+            }
+            for (let index = 0; index < num1; index++) {
+                mobs.spawn(PRIMED_TNT, agent.getPosition())
+                loops.pause(0)
+                agent.move(FORWARD, 2)
+            }
+            for (let index = 0; index < 2; index++) {
+                agent.turn(LEFT_TURN)
+                agent.move(FORWARD, 2)
+            }
+        }
+        agent.teleport(xyz, WEST)
+        agent.move(DOWN, 2)
+        xyz = agent.getPosition()
+    }
+})
