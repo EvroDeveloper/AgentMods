@@ -1,0 +1,40 @@
+player.onItemInteracted(CLOWNFISH, function () {
+    if (countdown < 0.1) {
+        particles()
+        player.execute(
+        "playsound ambient.weather.thunder @s"
+        )
+        player.execute(
+        "kill @e[type=!player,r=3]"
+        )
+        mobs.applyEffect(SPEED, mobs.target(NEAREST_PLAYER), 30, 2)
+        mobs.applyEffect(HEALTH_BOOST, mobs.target(NEAREST_PLAYER), 30, 4)
+        mobs.applyEffect(STRENGTH, mobs.target(NEAREST_PLAYER), 30, 5)
+        mobs.applyEffect(REGENERATION, mobs.target(NEAREST_PLAYER), 30, 5)
+        mobs.applyEffect(RESISTANCE, mobs.target(NEAREST_PLAYER), 30, 5)
+        mobs.applyEffect(FIRE_RESISTANCE, mobs.target(NEAREST_PLAYER), 30, 1)
+        mobs.applyEffect(WATER_BREATHING, mobs.target(NEAREST_PLAYER), 30, 1)
+        countdown = 60
+    } else {
+        player.execute(
+        "title @s actionbar Please wait " + countdown + "s before using"
+        )
+    }
+})
+function particles () {
+    player.execute(
+    "particle minecraft:large_explosion ~ ~1 ~"
+    )
+    for (let index = 0; index <= 4; index++) {
+        player.execute(
+        "particle minecraft:large_explosion ~" + randint(-1, 1) + " ~1 ~" + randint(-1, 1)
+        )
+    }
+}
+loops.forever(function () {
+    if (countdown > 0) {
+        countdown += -1
+    }
+})
+let countdown = 0
+countdown = 0
