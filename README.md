@@ -1,1 +1,1 @@
-# AgentModsWorldEdit
+# Evro Craft's AgentMods
