@@ -1,0 +1,23 @@
+let x = 0
+player.onDied(function () {
+    x = 1
+    agent.teleport(pos(0, 0, 0), WEST)
+    loops.pause(2000)
+    player.execute(
+    "tp @e[type=item] @c"
+    )
+    loops.pause(100)
+    agent.collectAll()
+    agent.collectAll()
+})
+loops.forever(function () {
+    if (!(x)) {
+        agent.teleport(pos(0, 50, 0), WEST)
+    }
+})
+player.onTravelled(SNEAK, function () {
+    if (0 == ("" + player.position()).compare("" + agent.getPosition())) {
+        agent.dropAll(UP)
+        x = 0
+    }
+})
