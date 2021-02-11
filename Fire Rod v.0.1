@@ -1,0 +1,67 @@
+player.onChat("\\firerod", function () {
+	
+})
+loops.forever(function () {
+    if (cooldown > 0) {
+        cooldown += -1
+    }
+})
+player.onItemInteracted(BLAZE_ROD, function () {
+    if (cooldown < 0.1) {
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^3"
+        )
+        player.execute(
+        "fill ^ ^1 ^3 ^ ^1 ^3 lava 0 replace air"
+        )
+        player.execute(
+        "fill ^-1 ^1 ^2 ^1 ^1 ^4 air 0 replace lava"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^3.5"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^4"
+        )
+        player.execute(
+        "fill ^ ^1 ^4 ^ ^1 ^4 lava 0 replace air"
+        )
+        player.execute(
+        "fill ^-1 ^1 ^3 ^1 ^1 ^5 air 0 replace lava"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^4.5"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^5"
+        )
+        player.execute(
+        "fill ^ ^1 ^5 ^ ^1 ^5 lava 0 replace air"
+        )
+        player.execute(
+        "fill ^-1 ^1 ^4 ^1 ^1 ^6 air 0 replace lava"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^5.5"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^6"
+        )
+        player.execute(
+        "fill ^ ^1 ^6 ^ ^1 ^6 lava 0 replace air"
+        )
+        player.execute(
+        "fill ^-1 ^1 ^5 ^1 ^1 ^7 air 0 replace lava"
+        )
+        player.execute(
+        "execute @p ~ ~ ~ particle minecraft:mobflame_single ^ ^1 ^6.5"
+        )
+        cooldown = 5
+    } else {
+        player.execute(
+        "title @p actionbar Please wait " + Math.ceil(cooldown) + "s before using"
+        )
+    }
+})
+let cooldown = 0
+cooldown = 0
