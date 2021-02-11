@@ -1,0 +1,53 @@
+let x = 0
+player.onChat("give", function () {
+	
+})
+function particle () {
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:campfire_smoke_particle ~ ~1 ~"
+    )
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~ ~ ~"
+    )
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~1 ~ ~"
+    )
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~ ~ ~1"
+    )
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~ ~ ~-1"
+    )
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~-1 ~ ~"
+    )
+    mobs.execute(
+    mobs.target(NEAREST_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:large_explosion ~ ~1 ~"
+    )
+}
+player.onItemInteracted(MAGMA_CREAM, function () {
+    if (x == 0) {
+        mobs.applyEffect(INVISIBILITY, mobs.target(LOCAL_PLAYER), 60, 1)
+        mobs.applyEffect(SPEED, mobs.target(LOCAL_PLAYER), 60, 3)
+        particle()
+        x = 1
+    } else {
+        particle()
+        mobs.clearEffect(mobs.target(NEAREST_PLAYER))
+        x = 0
+    }
+})
