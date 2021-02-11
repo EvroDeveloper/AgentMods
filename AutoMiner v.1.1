@@ -4,98 +4,173 @@
 //                                               //
 ///////////////////////////////////////////////////
 
-let ways: number[] = []
-let mineZYX: Position = null
-let row_width = 0
-let rows = 0
-function Scan_and_collect2() {
-    if (agent.inspect(AgentInspection.Block, SixDirection.Up) == blocks.block(Block.IronOre)) {
-        agent.destroy(SixDirection.Up)
+function Mine2 () {
+    row_width = 0
+    agent.teleport(mineZYX, SOUTH)
+    for (let index = 0; index < Math.round((mineZYX.getValue(Axis.Y) - 11) / 2); index++) {
+        agent.destroy(FORWARD)
+        agent.move(FORWARD, 1)
+        agent.destroy(UP)
+        agent.collectAll()
+        agent.destroy(DOWN)
+        agent.move(DOWN, 1)
+        if (agent.inspect(AgentInspection.Block, DOWN) == AIR) {
+            agent.setSlot(2)
+            agent.place(DOWN)
+        }
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Down) == blocks.block(Block.IronOre)) {
-        agent.destroy(SixDirection.Down)
+    agent.turn(RIGHT_TURN)
+    for (let index = 0; index < 2; index++) {
+        agent.destroy(FORWARD)
+        agent.move(FORWARD, 1)
+        agent.destroy(UP)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Left) == blocks.block(Block.IronOre)) {
-        agent.destroy(SixDirection.Left)
+    agent.turn(RIGHT_TURN)
+    for (let index = 0; index < Math.round((mineZYX.getValue(Axis.Y) - 11) / 2); index++) {
+        agent.destroy(FORWARD)
+        agent.move(FORWARD, 1)
+        agent.destroy(UP)
+        agent.collectAll()
+        agent.destroy(DOWN)
+        agent.move(DOWN, 1)
+        if (agent.inspect(AgentInspection.Block, DOWN) == AIR) {
+            agent.setSlot(2)
+            agent.place(DOWN)
+        }
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Right) == blocks.block(Block.IronOre)) {
-        agent.destroy(SixDirection.Right)
+    agent.move(FORWARD, rounds * 15)
+    for (let index = 0; index < 5 + rounds * 5; index++) {
+        agent.turn(LEFT_TURN)
+        row_width = 0
+        while (row_width < setLength) {
+            agent.destroy(FORWARD)
+            agent.move(FORWARD, 1)
+            agent.destroy(UP)
+            agent.collectAll()
+            Scan_and_collect2()
+            row_width += 1
+        }
+        agent.turn(LEFT_TURN)
+        agent.turn(LEFT_TURN)
+        row_width = 0
+        agent.move(FORWARD, setLength)
+        while (row_width < setLength) {
+            agent.destroy(FORWARD)
+            agent.move(FORWARD, 1)
+            agent.destroy(UP)
+            agent.collectAll()
+            Scan_and_collect2()
+            row_width += 1
+        }
+        rows += 1
+        agent.turn(LEFT_TURN)
+        agent.turn(LEFT_TURN)
+        row_width = 0
+        agent.move(FORWARD, setLength)
+        agent.turn(RIGHT_TURN)
+        for (let index = 0; index < 3; index++) {
+            agent.destroy(FORWARD)
+            agent.move(FORWARD, 1)
+            agent.destroy(UP)
+            Scan_and_collect2()
+            agent.collectAll()
+        }
+    }
+}
+player.onChat("rowlength", function (num1) {
+    setLength = num1
+    player.say("Set length of mines to " + num1)
+})
+function Scan_and_collect2 () {
+    if (agent.inspect(AgentInspection.Block, UP) == IRON_ORE) {
+        agent.destroy(UP)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Up) == blocks.block(Block.CoalOre)) {
-        agent.destroy(SixDirection.Up)
+    if (agent.inspect(AgentInspection.Block, DOWN) == IRON_ORE) {
+        agent.destroy(DOWN)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Down) == blocks.block(Block.CoalOre)) {
-        agent.destroy(SixDirection.Down)
+    if (agent.inspect(AgentInspection.Block, LEFT) == IRON_ORE) {
+        agent.destroy(LEFT)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Left) == blocks.block(Block.CoalOre)) {
-        agent.destroy(SixDirection.Left)
+    if (agent.inspect(AgentInspection.Block, RIGHT) == IRON_ORE) {
+        agent.destroy(RIGHT)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Right) == blocks.block(Block.CoalOre)) {
-        agent.destroy(SixDirection.Right)
+    if (agent.inspect(AgentInspection.Block, UP) == COAL_ORE) {
+        agent.destroy(UP)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Up) == blocks.block(Block.RedstoneOre)) {
-        agent.destroy(SixDirection.Up)
+    if (agent.inspect(AgentInspection.Block, DOWN) == COAL_ORE) {
+        agent.destroy(DOWN)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Down) == blocks.block(Block.RedstoneOre)) {
-        agent.destroy(SixDirection.Down)
+    if (agent.inspect(AgentInspection.Block, LEFT) == COAL_ORE) {
+        agent.destroy(LEFT)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Left) == blocks.block(Block.RedstoneOre)) {
-        agent.destroy(SixDirection.Left)
+    if (agent.inspect(AgentInspection.Block, RIGHT) == COAL_ORE) {
+        agent.destroy(RIGHT)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Right) == blocks.block(Block.RedstoneOre)) {
-        agent.destroy(SixDirection.Right)
+    if (agent.inspect(AgentInspection.Block, UP) == REDSTONE_ORE) {
+        agent.destroy(UP)
         agent.collectAll()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Up) == blocks.block(Block.DiamondOre)) {
-        agent.destroy(SixDirection
-            .Up)
-        agent.move(SixDirection.Up, 1)
+    if (agent.inspect(AgentInspection.Block, DOWN) == REDSTONE_ORE) {
+        agent.destroy(DOWN)
+        agent.collectAll()
+    }
+    if (agent.inspect(AgentInspection.Block, LEFT) == REDSTONE_ORE) {
+        agent.destroy(LEFT)
+        agent.collectAll()
+    }
+    if (agent.inspect(AgentInspection.Block, RIGHT) == REDSTONE_ORE) {
+        agent.destroy(RIGHT)
+        agent.collectAll()
+    }
+    if (agent.inspect(AgentInspection.Block, UP) == DIAMOND_ORE) {
+        agent.destroy(UP)
+        agent.move(UP, 1)
         ways.push(1)
         agent.collectAll()
         Scan_and_collect2()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Down) == blocks.block(Block.DiamondOre)) {
-        agent.destroy(SixDirection.Down)
-        agent.move(SixDirection.Down, 1)
+    if (agent.inspect(AgentInspection.Block, DOWN) == DIAMOND_ORE) {
+        agent.destroy(DOWN)
+        agent.move(DOWN, 1)
         ways.push(2)
         agent.collectAll()
         Scan_and_collect2()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Left) == blocks.block(Block.DiamondOre)) {
-        agent.destroy(SixDirection.Left)
-        agent.move(SixDirection.Left, 1)
+    if (agent.inspect(AgentInspection.Block, LEFT) == DIAMOND_ORE) {
+        agent.destroy(LEFT)
+        agent.move(LEFT, 1)
         ways.push(3)
         agent.collectAll()
         Scan_and_collect2()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Right) == blocks.block(Block.DiamondOre)) {
-        agent.destroy(SixDirection.Right)
-        agent.move(SixDirection.Right, 1)
+    if (agent.inspect(AgentInspection.Block, RIGHT) == DIAMOND_ORE) {
+        agent.destroy(RIGHT)
+        agent.move(RIGHT, 1)
         ways.push(4)
         agent.collectAll()
         Scan_and_collect2()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Forward) == blocks.block(Block.DiamondOre)) {
-        agent.destroy(SixDirection.Forward)
-        agent.move(SixDirection.Forward, 1)
+    if (agent.inspect(AgentInspection.Block, FORWARD) == DIAMOND_ORE) {
+        agent.destroy(FORWARD)
+        agent.move(FORWARD, 1)
         ways.push(5)
         agent.collectAll()
         Scan_and_collect2()
     }
-    if (agent.inspect(AgentInspection.Block, SixDirection.Back) == blocks.block(Block.DiamondOre)) {
-        agent.destroy(SixDirection.Back)
-        agent.move(SixDirection.Back, 1)
+    if (agent.inspect(AgentInspection.Block, BACK) == DIAMOND_ORE) {
+        agent.destroy(BACK)
+        agent.move(BACK, 1)
         ways.push(6)
         agent.collectAll()
         Scan_and_collect2()
@@ -103,17 +178,17 @@ function Scan_and_collect2() {
     ways.reverse()
     for (let index = 0; index <= ways.length; index++) {
         if (ways[index] == 1) {
-            agent.move(SixDirection.Down, 1)
+            agent.move(DOWN, 1)
         } else if (ways[index] == 2) {
-            agent.move(SixDirection.Up, 1)
+            agent.move(UP, 1)
         } else if (ways[index] == 3) {
-            agent.move(SixDirection.Right, 1)
+            agent.move(RIGHT, 1)
         } else if (ways[index] == 4) {
-            agent.move(SixDirection.Left, 1)
+            agent.move(LEFT, 1)
         } else if (ways[index] == 5) {
-            agent.move(SixDirection.Back, 1)
+            agent.move(BACK, 1)
         } else if (ways[index] == 6) {
-            agent.move(SixDirection.Forward, 1)
+            agent.move(FORWARD, 1)
         }
     }
     ways = []
@@ -124,69 +199,16 @@ player.onChat("mine", function () {
     while (true) {
         Mine2()
         agent.teleportToPlayer()
-        agent.dropAll(SixDirection.Up)
+        agent.dropAll(UP)
+        rounds += 1
         loops.pause(5000)
     }
 })
-function Mine2() {
-    row_width = 0
-    agent.teleport(mineZYX, CompassDirection.South)
-    for (let i = 0; i < 25; i++) {
-        agent.destroy(SixDirection.Forward)
-        agent.move(SixDirection.Forward, 1)
-        agent.
-            destroy(SixDirection.Forward)
-        agent.collectAll()
-        agent.destroy(SixDirection.Down)
-        agent.move(SixDirection.Down, 1)
-        agent.collectAll()
-    }
-    agent.turn(TurnDirection.Right)
-    for (let i = 0; i < 2; i++) {
-        agent.destroy(SixDirection.Forward)
-        agent.move(SixDirection.Forward, 1)
-        agent.destroy(SixDirection.Up)
-        agent.collectAll()
-    }
-    agent.turn(TurnDirection.Right)
-    for (let i = 0; i < 30; i++) {
-        agent.destroy(SixDirection.Forward)
-        agent.move(SixDirection.Forward, 1)
-        agent.destroy(SixDirection.Up)
-        agent.collectAll()
-        agent.destroy(SixDirection.Down)
-        agent.move(SixDirection.Down, 1)
-        agent.collectAll()
-    }
-    for (let i = 0; i < rows * 3; i++) {
-        agent.move(SixDirection.Forward, 1)
-    }
-    for (let i = 0; i < 5; i++) {
-        agent.turn(TurnDirection.Left)
-        row_width = 0
-        while (row_width < 10) {
-            agent.destroy(SixDirection.Forward)
-            agent.move(SixDirection.Forward, 1)
-            agent.destroy(SixDirection.Up)
-            agent.collectAll()
-            Scan_and_collect2()
-            row_width += 1
-        }
-        rows += 1
-        agent.turn(TurnDirection.Left)
-        agent.turn(TurnDirection.Left)
-        for (let i = 0; i < 10; i++) {
-            agent.move(SixDirection.Forward, 1)
-        }
-        agent.turn(TurnDirection.Left)
-        for (let i = 0; i < 3; i++) {
-            agent.destroy(SixDirection.Forward)
-            agent.move(SixDirection.Forward, 1)
-            agent.destroy(SixDirection.Up)
-            Scan_and_collect2()
-            agent.collectAll()
-        }
-    }
-}
-rows = 1
-agent.dropAll(SixDirection.Up) 
+let ways: number[] = []
+let mineZYX: Position = null
+let row_width = 0
+let setLength = 0
+let rounds = 0
+let rows = 1
+setLength = 10
+agent.dropAll(UP) 
