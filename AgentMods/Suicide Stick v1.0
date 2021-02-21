@@ -1,0 +1,10 @@
+|--------------------|
+|Made By RyanMBananas|
+|--------------------|
+
+
+player.onItemInteracted(STICK, function () {
+    for (let index = 0; index < 5; index++) {
+        mobs.spawn(mobs.monster(CREEPER), player.position())
+    }
+})
