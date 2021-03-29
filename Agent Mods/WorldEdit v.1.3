@@ -61,3 +61,10 @@ player.onChat("\\\\circle", function (num1, num2, num3) {
     player.say("§5Made Circle with a radius of " + num3)
     x = 0
 })
+player.onChat("\\\\wand", function () {
+    mobs.give(
+    mobs.target(NEAREST_PLAYER),
+    WOODEN_AXE,
+    1
+    )
+})
