@@ -1,0 +1,81 @@
+/////////////////////////////////////////////////////////////////
+///     Remember to put a command block with the command      ///
+///  "execute @p ~ ~ ~ tp @e[tag=morph] ~ ~ ~ facing ^ ^ ^5"  ///
+///             with Repeating and Always Active              ///
+/////////////////////////////////////////////////////////////////
+
+let _var = 0
+let morphthis = 0
+player.onChat("\\unmorph", function () {
+    particle()
+    particle()
+    mobs.clearEffect(mobs.target(LOCAL_PLAYER))
+    player.execute(
+    "kill @e[r=1,tag=morph]"
+    )
+    _var = 0
+})
+function particle () {
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:campfire_smoke_particle ~ ~1 ~"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~ ~ ~"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~1 ~ ~"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~ ~ ~1"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~ ~ ~-1"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:water_evaporation_bucket_emitter ~-1 ~ ~"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "particle minecraft:large_explosion ~ ~1 ~"
+    )
+}
+player.onChat("\\morph", function (num1) {
+    if (_var == 0) {
+        particle()
+        particle()
+        mobs.applyEffect(INVISIBILITY, mobs.target(LOCAL_PLAYER), 1000000, 1)
+        mobs.applyEffect(WEAKNESS, mobs.target(LOCAL_PLAYER), 1000000, 255)
+        mobs.spawn(num1, pos(0, 0, 0))
+        mobs.execute(
+        mobs.target(LOCAL_PLAYER),
+        pos(0, 0, 0),
+        "tag @e[type=!player,r=1] add morph"
+        )
+        _var = 1
+    } else {
+        particle()
+        particle()
+        player.execute(
+        "kill @e[r=1,tag=morph]"
+        )
+        mobs.spawn(num1, pos(0, 0, 0))
+        mobs.execute(
+        mobs.target(LOCAL_PLAYER),
+        pos(0, 0, 0),
+        "tag @e[type=!player,r=1] add morph"
+        )
+    }
+})
