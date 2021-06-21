@@ -4,14 +4,17 @@
 ///             with Repeating and Always Active              ///
 /////////////////////////////////////////////////////////////////
 
-let _var = 0
-let morphthis = 0
 player.onChat("\\unmorph", function () {
     particle()
     particle()
     mobs.clearEffect(mobs.target(LOCAL_PLAYER))
     player.execute(
     "kill @e[r=1,tag=morph]"
+    )
+    mobs.execute(
+    mobs.target(LOCAL_PLAYER),
+    pos(0, 0, 0),
+    "tag @s remove morpher"
     )
     _var = 0
 })
@@ -64,6 +67,11 @@ player.onChat("\\morph", function (num1) {
         pos(0, 0, 0),
         "tag @e[type=!player,r=1] add morph"
         )
+        mobs.execute(
+        mobs.target(LOCAL_PLAYER),
+        pos(0, 0, 0),
+        "tag @s add morpher"
+        )
         _var = 1
     } else {
         particle()
@@ -79,3 +87,5 @@ player.onChat("\\morph", function (num1) {
         )
     }
 })
+let _var = 0
+let morphthis = 0
