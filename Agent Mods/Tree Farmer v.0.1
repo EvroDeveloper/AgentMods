@@ -8,7 +8,7 @@ player.onChat("\\treefarm", function () {
 function mineTree () {
     agent.destroy(FORWARD)
     agent.move(FORWARD, 1)
-    while (agent.inspect(AgentInspection.Block, UP) == LOG_OAK) {
+    while (agent.inspect(AgentInspection.Block, UP) == LOG_OAK || agent.inspect(AgentInspection.Block, UP) == LOG_SPRUCE || agent.inspect(AgentInspection.Block, UP) == LOG_BIRCH || agent.inspect(AgentInspection.Block, UP) == LOG_JUNGLE || agent.inspect(AgentInspection.Block, UP) == LOG_ACACIA || agent.inspect(AgentInspection.Block, UP) == LOG_DARK_OAK) {
         agent.destroy(UP)
         agent.move(UP, 1)
         agent.destroy(FORWARD)
@@ -27,20 +27,22 @@ function mineTree () {
 loops.forever(function () {
     if (tree == 1) {
         if (agent.inspect(AgentInspection.Block, FORWARD) == AIR) {
-            if (agent.getItemDetail(1) == OAK_SAPLING) {
+            if (agent.getItemDetail(1) == OAK_SAPLING || agent.getItemDetail(1) == SPRUCE_SAPLING || agent.getItemDetail(1) == BIRCH_SAPLING || agent.getItemDetail(1) == JUNGLE_SAPLING || agent.getItemDetail(1) == ACACIA_SAPLING || agent.getItemDetail(1) == DARK_OAK_SAPLING) {
                 agent.setSlot(1)
                 agent.place(FORWARD)
-                agent.setItem(OAK_SAPLING, agent.getItemCount(1) - 1, 1)
+                agent.setItem(agent.getItemDetail(1), agent.getItemCount(1) - 1, 1)
             } else {
                 if (hasAlertSappling == 0) {
-                    player.say("Agent is out of sapplings. Place sapplings in slot 1")
+                    player.say("Agent is out of saplings. Place saplings in slot 1 (Top Left)")
                     hasAlertSappling = 1
                 }
             }
-        } else if (agent.inspect(AgentInspection.Block, FORWARD) == OAK_SAPLING) {
-            agent.setSlot(2)
-            agent.place(FORWARD)
-        } else if (agent.inspect(AgentInspection.Block, FORWARD) == LOG_OAK) {
+        } else if (agent.inspect(AgentInspection.Block, FORWARD) == OAK_SAPLING || agent.inspect(AgentInspection.Block, FORWARD) == SPRUCE_SAPLING || agent.inspect(AgentInspection.Block, FORWARD) == BIRCH_SAPLING || agent.inspect(AgentInspection.Block, FORWARD) == JUNGLE_SAPLING || agent.inspect(AgentInspection.Block, FORWARD) == ACACIA_SAPLING || agent.inspect(AgentInspection.Block, FORWARD) == DARK_OAK_SAPLING) {
+            if (agent.getItemDetail(2) == 351) {
+                agent.setSlot(2)
+                agent.place(FORWARD)
+            }
+        } else if (agent.inspect(AgentInspection.Block, FORWARD) == LOG_OAK || agent.inspect(AgentInspection.Block, FORWARD) == LOG_SPRUCE || agent.inspect(AgentInspection.Block, FORWARD) == LOG_BIRCH || agent.inspect(AgentInspection.Block, FORWARD) == LOG_JUNGLE || agent.inspect(AgentInspection.Block, FORWARD) == LOG_ACACIA || agent.inspect(AgentInspection.Block, FORWARD) == LOG_DARK_OAK) {
             mineTree()
         }
         agent.collectAll()
