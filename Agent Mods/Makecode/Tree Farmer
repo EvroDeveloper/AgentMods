@@ -48,3 +48,6 @@ loops.forever(function () {
         agent.collectAll()
     }
 })
+player.onChat("\\treestop", function () {
+    tree = 0
+})
