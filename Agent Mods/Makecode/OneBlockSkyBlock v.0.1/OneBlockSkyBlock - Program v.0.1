@@ -1,0 +1,29 @@
+loops.forever(function () {
+    if (player.position().getValue(Axis.X) + player.position().getValue(Axis.Z) == 0 && player.position().getValue(Axis.Y) < 71) {
+        player.teleport(world(0, 71, 0))
+    }
+    player.execute(
+    "execute @e[type=item] ~ ~ ~ tp @s 0 71 0"
+    )
+    if (blocks.testForBlock(AIR, world(0, 70, 0))) {
+        blocks.place(TotalStages[stageNo]._pickRandom(), world(0, 70, 0))
+        score += 1
+        if (score > 30) {
+            score = 0
+            stageNo += 1
+        }
+    }
+})
+let score = 0
+let TotalStages: number[][] = []
+let stageNo = 0
+agent.teleport(world(0, 0, 0), WEST)
+player.execute(
+"gamerule sendcommandfeedback false"
+)
+stageNo = 0
+let S1 = [GRASS, DIRT, LOG_OAK]
+let S2 = [GRASS,DIRT,LOG_OAK,STONE,GRANITE,DIORITE,ANDESITE,COAL_ORE,IRON_ORE]
+let S3 = [SNOW,LOG_SPRUCE,GOLD_ORE,IRON_ORE,ICE,PACKED_ICE,WATER,LAPIS_ORE]
+let S4 = [PRISMARINE,DARK_PRISMARINE,PRISMARINE_BRICKS,SAND,GRAVEL,WATER,DIAMOND_ORE,DRIED_KELP_BLOCK,TUBE_CORAL_BLOCK,BRAIN_CORAL_BLOCK,BUBBLE_CORAL_BLOCK,FIRE_CORAL_BLOCK,HORN_CORAL_BLOCK,GOLD_ORE]
+TotalStages = [S1,S2,S3,S4]
