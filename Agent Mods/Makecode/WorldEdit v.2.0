@@ -1,0 +1,156 @@
+player.onItemInteracted(WOODEN_AXE, function () {
+    if (x == 0) {
+        builder.teleportTo(pos(0, 0, 0))
+        builder.mark()
+        player.say("§5Set First Position to " + ("" + builder.position()))
+        position1 = builder.position()
+        x = 1
+    } else {
+        builder.teleportTo(pos(0, 0, 0))
+        player.say("§5Set Second Position to " + ("" + builder.position()))
+    }
+})
+player.onChat("\\\\sphere", function (num12, num22, num32) {
+    shapes.sphere(
+    blocks.blockWithData(num12, num22),
+    builder.position(),
+    num32,
+    ShapeOperation.Outline
+    )
+    player.say("§5Made Sphere with a radius of " + ("" + num32))
+    x = 0
+})
+player.onChat("\\\\clear", function () {
+    x = 0
+    player.say("§5Cleared Positions")
+})
+player.onChat("\\\\line", function (num12, num22, num32) {
+    builder.line(blocks.blockWithData(num12, num22))
+    x = 0
+})
+player.onChat("\\\\paste", function () {
+    builder.teleportTo(pos(0, 0, 0))
+    builder.paste()
+    player.say("§5Clipboard Sucesfully Pasted")
+})
+player.onChat("\\\\copy", function () {
+    builder.copy()
+    player.say("§5Selection Copied to Clipboard")
+    x = 0
+})
+player.onChat("\\\\write", function (num13, num23, num33) {
+    blocks.print(
+    "" + (num33),
+    blocks.blockWithData(num13, num23),
+    builder.position(),
+    EAST
+    )
+})
+player.onChat("\\\\circle", function (num15, num25, num34) {
+    shapes.circle(
+    blocks.blockWithData(num15, num25),
+    builder.position(),
+    num34,
+    Axis.Y,
+    ShapeOperation.Replace
+    )
+    player.say("§5Made Circle with a radius of " + ("" + num34))
+    x = 0
+})
+player.onChat("\\\\wand", function () {
+    mobs.give(
+    mobs.target(NEAREST_PLAYER),
+    WOODEN_AXE,
+    1
+    )
+})
+let undoIndex = 0
+let x = 0
+let undoCache: WorldEditUndoable[] = []
+let position1: Position
+
+player.onChatCommand("\\\\set", [ChatArgument.string], function (blockName) {
+    undoIndex++
+    let pos2: Position = builder.position()
+    undoCache[undoIndex] = new WorldEditUndoable(position1, pos(position1.getValue(Axis.X) - pos2.getValue(Axis.X), position1.getValue(Axis.Y) - pos2.getValue(Axis.Y), position1.getValue(Axis.Z) - pos2.getValue(Axis.Z)))
+    undoCache[undoIndex].saveBlocks()
+    builder.fill(blocks.blockByName(blockName.string))
+    x = 0
+})
+
+player.onChat("\\\\undo", function(){
+    if(undoIndex != 0){
+        undoCache[undoIndex].restore()
+    }
+    else{
+        player.say("§5Nothing left to Undo")
+    }
+})
+
+class WorldEditUndoable {
+    public startingPosition: Position
+    public size: Position
+    public undoBlocks: number[]
+
+    constructor(startingPosition: Position, size: Position){
+        this.startingPosition = startingPosition
+        this.size = size
+        this.undoBlocks = []
+    }
+
+    toString(){
+        return ""
+    }
+
+    restore() {
+        player.say("§5Please Wait, Recovering Blocks...")
+        let totalSearched = 0
+
+        let xDir = (this.size.getValue(Axis.X) < 0) ? 1 : -1;
+        let yDir = (this.size.getValue(Axis.Y) < 0) ? 1 : -1;
+        let zDir = (this.size.getValue(Axis.Z) < 0) ? 1 : -1;
+        for (let y = 0; y < Math.abs(this.size.getValue(Axis.Y)) + 1; y++) {
+            for (let z = 0; z < Math.abs(this.size.getValue(Axis.Z)) + 1; z++) {
+                for (let x = 0; x < Math.abs(this.size.getValue(Axis.X)) + 1; x++) {
+                    blocks.place(this.undoBlocks[totalSearched], this.startingPosition.toWorld().add(pos(x * xDir, y * yDir, z * zDir)))
+                    totalSearched++
+                }
+            }
+        }
+        undoIndex--
+        player.say("§5Blocks Sucessfully Recovered")
+    }
+
+    saveBlocks() {
+        let undoQueue: number[] = []
+        let increment = 0
+        player.say("§5Please Wait, Backing Up Selection... (you can use \\undo to revert changes)")
+        let xDir = (this.size.getValue(Axis.X) < 0) ? 1 : -1;
+        let yDir = (this.size.getValue(Axis.Y) < 0) ? 1 : -1;
+        let zDir = (this.size.getValue(Axis.Z) < 0) ? 1 : -1;
+        for (let y = 0; y < Math.abs(this.size.getValue(Axis.Y)) + 1; y++) {
+            for (let z = 0; z < Math.abs(this.size.getValue(Axis.Z)) + 1; z++) {
+                for (let x = 0; x < Math.abs(this.size.getValue(Axis.X)) + 1; x++) {
+                    undoQueue[increment] = (findBlock(this.startingPosition.toWorld().add(pos(x * xDir, y * yDir, z * zDir))))
+                    increment++
+                    
+                }
+            }
+        }
+        this.undoBlocks = undoQueue
+        player.say("§5Selection Backup Finished")
+    }
+}
+
+function findBlock(pos: Position){
+    let isFound = false
+    let blockID = 0
+    while (!isFound){
+        if(blocks.testForBlock(blockID, pos)){
+            isFound = true
+            break
+        }
+        blockID++
+    }
+    return blockID
+}
